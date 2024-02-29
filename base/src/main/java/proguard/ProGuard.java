@@ -617,7 +617,7 @@ public class ProGuard
             }
         }
 
-        return "undefined";
+        return "7.4.2.1";
     }
 
 
