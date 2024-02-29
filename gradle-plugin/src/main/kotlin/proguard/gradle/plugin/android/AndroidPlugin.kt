@@ -106,12 +106,7 @@ class AndroidPlugin(private val androidExtension: BaseExtension) : Plugin<Projec
         val createDirectoryTask = project.tasks.register("prepareProguardConfigDirectory", PrepareProguardConfigDirectoryTask::class.java)
         project.tasks.withType(LinkApplicationAndroidResourcesTask::class.java) {
             it.dependsOn(createDirectoryTask)
-        }
-        if (!androidExtension.aaptAdditionalParameters.contains("--proguard")) {
-            androidExtension.aaptAdditionalParameters.addAll(listOf(
-                    "--proguard",
-                    project.buildDir.resolve("intermediates/proguard/configs/aapt_rules.pro").absolutePath)
-            )
+            it.proguardOutputFile.set(File(project.aaptRulesFile))
         }
 
         if (!androidExtension.aaptAdditionalParameters.contains("--proguard-conditional-keep-rules")) {
@@ -303,4 +298,9 @@ val BaseExtension.aaptAdditionalParameters: MutableCollection<String>
             aaptOptions.javaClass.methods.first { it.name == "setAdditionalParameters" }.invoke(aaptOptions, newAdditionalParameters)
             newAdditionalParameters
         }
+    }
+
+val Project.aaptRulesFile: String
+    get() {
+        return buildDir.resolve("intermediates/proguard/configs/aapt_rules.pro").absolutePath
     }

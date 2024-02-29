@@ -149,10 +149,7 @@ class ProGuardTransform(
                     androidExtension.sdkDirectory.resolve("platforms/${androidExtension.compileSdkVersion}/optional/${it.name}.jar")
                 }
 
-    private fun getAaptRulesFile() = androidExtension.aaptAdditionalParameters
-            .zipWithNext { cmd, param -> if (cmd == "--proguard") param else null }
-            .filterNotNull()
-            .firstOrNull { File(it).exists() }
+    private fun getAaptRulesFile() = project.aaptRulesFile
 }
 
 typealias ProGuardIOEntry = Pair<File, File>
