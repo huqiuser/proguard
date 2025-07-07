@@ -21,51 +21,12 @@
 
 package proguard.gradle.plugin
 
-import com.android.build.gradle.BaseExtension
-import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import proguard.gradle.plugin.android.AndroidPlugin
-import proguard.gradle.plugin.android.agpVersion
 
 class ProGuardPlugin : Plugin<Project> {
     override fun apply(project: Project) {
-        val androidExtension: BaseExtension? = project.extensions.findByName("android") as BaseExtension?
-        val javaExtension = project.extensions.findByName("java")
-
-        val javaErrMessage =
-            """For Java projects, you can manually declare a ProGuardTask instead of applying the plugin:
-                                |
-                                |     task myProguardTask(type: proguard.gradle.ProGuardTask) {
-                                |       // ...
-                                |     }
-            """.trimMargin()
-        when {
-            androidExtension != null -> {
-                if (agpVersion.majorVersion < 4) {
-                    throw GradleException(
-                        """The ProGuard plugin only supports Android plugin 4 and higher.
-                              |For Android plugin version 3 and lower, you can use ProGuard through the Android plugin integration.
-                              |Please refer to the manual for further details: https://www.guardsquare.com/manual/setup/gradleplugin
-                        """.trimMargin(),
-                    )
-                }
-                AndroidPlugin(androidExtension).apply(project)
-            }
-            javaExtension != null -> {
-                throw GradleException(
-                    """The ProGuard plugin requires the Android plugin to function properly.
-                           |$javaErrMessage
-                    """.trimMargin(),
-                )
-            }
-            else -> {
-                throw GradleException(
-                    """For Android applications or libraries 'com.android.application' or 'com.android.library' is required, respectively. 
-                      |$javaErrMessage
-                    """.trimMargin(),
-                )
-            }
-        }
+        AndroidPlugin().apply(project)
     }
 }

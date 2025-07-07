@@ -13,7 +13,7 @@ repositories {
     mavenCentral()
 }
 
-def agpVersion = '4.1.0'
+def agpVersion = '8.9.3'
 
 gradlePlugin {
     plugins {
@@ -25,11 +25,11 @@ gradlePlugin {
 }
 
 compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "11"
 }
 
 compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "11"
 }
 
 configurations {
